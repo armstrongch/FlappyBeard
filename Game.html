@@ -3,17 +3,40 @@
   <head>
     <title>Flappy Beard</title>
   </head>
-  <body onload="startGame()">
+  <body onload="gameStart()">
     <canvas id="myCanvas" width="640" height="480" style="border:1px solid #000000;">
     </canvas>
     
     <script>
-      function startGame()
+      function gameStart()
       {
-        var c = document.getElementById("myCanvas");
-        var ctx = c.getContext("2d");
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(240, 240, 20, 20);
+        setInterval(updateCanvas, 15);
+      }
+      
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      
+      var bird =
+      {
+        xPos: 0,
+        yPos: 0,
+        Width: 20,
+        Height: 20,
+        Color: "black",
+        xSpeed: 1,
+        ySpeed: 1,
+        draw: function()
+        {
+          ctx.fillStyle = this.Color;
+          ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
+        }
+      }
+      
+      function updateCanvas()
+      {
+        bird.xPos += xSpeed;
+        bird.yPos += ySpeed;
+        bird.draw();
       }
     </script>
   </body>
