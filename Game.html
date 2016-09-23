@@ -10,7 +10,8 @@
     <script>
       function startGame()
       {
-        ctx = Canvas.getContext("2d");
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
         ctx.fillStyle = "#000000";
         ctx.fillRect(240, 240, 20, 20);
       }
