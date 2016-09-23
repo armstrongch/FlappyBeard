@@ -3,16 +3,17 @@
   <head>
     <title>Flappy Beard</title>
   </head>
-  <body onload="gameStart()">
+  <body onload="gameStart">
     <canvas id="myCanvas" width="640" height="480" style="border:1px solid #000000;">
     </canvas>
     
     <script>
       function gameStart()
       {
-        setInterval(updateCanvas, 15);
+        alert("TEST");
+        //var i = setInterval(updateCanvas, 15);
       }
-      
+      /*
       var c = document.getElementById("myCanvas");
       var ctx = c.getContext("2d");
       
@@ -30,14 +31,17 @@
           ctx.fillStyle = this.Color;
           ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
         }
-      }
-      
+      };
+      */
+      /*
       function updateCanvas()
       {
-        bird.xPos += xSpeed;
-        bird.yPos += ySpeed;
-        bird.draw();
+        //alert("TEST");
+        //bird.xPos += xSpeed;
+        //bird.yPos += ySpeed;
+        //bird.draw();
       }
+      */
     </script>
   </body>
 </html>
