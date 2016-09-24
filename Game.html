@@ -8,38 +8,51 @@
     </canvas>
     
     <script>
-      function gameStart()
-      {
-		setInterval("updateCanvas()", 15);
-      }
       
-      var c = document.getElementById("myCanvas");
+	  var c = document.getElementById("myCanvas");
       var ctx = c.getContext("2d");
 	  var Test = 0;
-      /*
-      var bird =
+	  var Input = false;
+	  
+	  function gameStart()
+      {
+		setInterval("updateCanvas()", 15);
+		document.addEventListener("touchstart", function()
+		{
+			Input = true;
+		});
+		document.addEventListener("click", function()
+		{
+			Input = true;
+		});
+      }
+
+	  var bird =
       {
         xPos: 0,
         yPos: 0,
         Width: 20,
         Height: 20,
         Color: "black",
-        xSpeed: 1,
-        ySpeed: 1,
+        xSpeed: 0,
+        ySpeed: 0,
         draw: function()
         {
           ctx.fillStyle = this.Color;
           ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
         }
       };
-	  */
       function updateCanvas()
       {
-        //bird.xPos += xSpeed;
-        //bird.yPos += ySpeed;
-		Test++;
-		alert(Test);
-        //bird.draw();
+        ctx.clearRect(0, 0, c.width, c.height);
+		bird.xPos += bird.xSpeed;
+        bird.yPos += bird.ySpeed;
+		bird.draw();
+		if (Input)
+		{
+			alert("Input!");
+			Input = false;
+		}
       }
       
     </script>
