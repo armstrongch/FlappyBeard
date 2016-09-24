@@ -29,10 +29,10 @@
 
 	  var bird =
       {
-        xPos: 0,
+        xPos: 300,
         yPos: 0,
-        Width: 20,
-        Height: 20,
+        Width: 40,
+        Height: 40,
         Color: "black",
         xSpeed: 0,
         ySpeed: 0,
@@ -45,14 +45,16 @@
       function updateCanvas()
       {
         ctx.clearRect(0, 0, c.width, c.height);
+		bird.ySpeed += 0.2;
+		if (Input)
+		{
+			Input = false;
+			bird.ySpeed = -7;
+		}
 		bird.xPos += bird.xSpeed;
         bird.yPos += bird.ySpeed;
 		bird.draw();
-		if (Input)
-		{
-			alert("Input!");
-			Input = false;
-		}
+		
       }
       
     </script>
