@@ -16,6 +16,8 @@
 	  var TerrainPos1 = 0;
 	  var TerrainPos2 = 0;
 	  var TerrainPos3 = 0;
+	  var TerrainPos4 = 0;
+	  var Start = false;
 	  
 	  function gameStart()
       {
@@ -31,7 +33,7 @@
         Width: 40,
         Height: 40,
 		xPos: c.width/2 - 20,
-        yPos: 0,
+        yPos: c.height/2 - 20,
         Color: "black",
         xSpeed: 0,
         ySpeed: 0,
@@ -47,6 +49,7 @@
 			if (Input)
 			{
 				Input = false;
+				Start = true;
 				bird.ySpeed = -bird.JumpSpeed;
 			}
 			else
@@ -57,8 +60,11 @@
 					bird.ySpeed = bird.JumpSpeed;
 				}
 			}
-			bird.xPos += bird.xSpeed;
-			bird.yPos += bird.ySpeed;
+			if (Start)
+			{
+				bird.xPos += bird.xSpeed;
+				bird.yPos += bird.ySpeed;
+			}
 		}
       };
       
@@ -75,21 +81,23 @@
 		TerrainPos1 += 4;
 		TerrainPos2 += 3;
 		TerrainPos3 += 2;
+		TerrainPos4 += 1;
+		
+		var t1 = TerrainPos1%64;
+		var t2 = TerrainPos2%64;
+		var t3 = TerrainPos3%64;
+		var t4 = TerrainPos4%64;
 		
 		ctx.fillStyle = "LightSkyBlue";
 		ctx.fillRect(0, 0, c.width, c.height);
-		ctx.fillStyle = "LemonChiffon";
-		ctx.fillRect(0, c.height-60, c.width, c.height);
-		
-		var t1 = TerrainPos1%64;
 		
 		for (var i = -128; i <= c.width + 128; i += 64)
 		{
-			/*ctx.fillStyle = "MediumSeaGreen";
-			ctx.beginPath;
-			ctx.arc(x,y, rad, 0, 2*Math.PI);
-			ctx.fill();*/
-			
+			ctx.fillStyle = "SlateGray";
+			ctx.fillRect(i, c.height-160, 14, 50);
+			ctx.fillRect(i+16, c.height-150, 14, 50);
+			ctx.fillRect(i+32, c.height-170, 14, 50);
+			ctx.fillRect(i+48, c.height-140, 14, 50);
 			
 			ctx.fillStyle = "Lime";
 			ctx.beginPath();
@@ -106,9 +114,20 @@
 			ctx.lineTo(i-t1+32, c.height-60);
 			ctx.lineTo(i-t1, c.height-60);
 			ctx.fill();
+			
+			ctx.fillStyle = "MediumSeaGreen";
+			ctx.beginPath();
+			ctx.arc(i+2-t2, c.height-120, 8, 0, 2*Math.PI);
+			ctx.arc(i+24-t2, c.height-120, 16, 0, 2*Math.PI);
+			ctx.arc(i+46-t2, c.height-120, 8, 0, 2*Math.PI);
+			ctx.fill();
+			
 		}
 		ctx.fillStyle = "MediumSeaGreen";
 		ctx.fillRect(0, c.height-120, c.width, 40);
+		
+		ctx.fillStyle = "LemonChiffon";
+		ctx.fillRect(0, c.height-60, c.width, c.height);
 	  }
     </script>
   </body>
