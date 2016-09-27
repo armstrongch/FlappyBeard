@@ -4,7 +4,7 @@
     <title>Flappy Beard</title>
   </head>
   <body onload="gameStart()">
-    <canvas id="myCanvas" width="640" height="480" style="border:1px solid #000000;">
+    <canvas id="myCanvas" width=640, height = 480, style="border:1px solid #000000;">
     </canvas>
     
     <script>
@@ -13,14 +13,13 @@
       var ctx = c.getContext("2d");
 	  var Test = 0;
 	  var Input = false;
+	  var TerrainPos1 = 0;
+	  var TerrainPos2 = 0;
+	  var TerrainPos3 = 0;
 	  
 	  function gameStart()
       {
 		setInterval("updateCanvas()", 15);
-		document.addEventListener("touchstart", function()
-		{
-			Input = true;
-		});
 		document.addEventListener("click", function()
 		{
 			Input = true;
@@ -29,34 +28,88 @@
 
 	  var bird =
       {
-        xPos: 300,
-        yPos: 0,
         Width: 40,
         Height: 40,
+		xPos: c.width/2 - 20,
+        yPos: 0,
         Color: "black",
         xSpeed: 0,
         ySpeed: 0,
-		Gravity: 0.2,
+		Gravity: 0.5,
+		JumpSpeed: 10,
         draw: function()
         {
           ctx.fillStyle = this.Color;
           ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
-        }
-      };
-      function updateCanvas()
-      {
-        ctx.clearRect(0, 0, c.width, c.height);
-		bird.ySpeed += bird.Gravity;
-		if (Input)
+        },
+		move: function()
 		{
-			Input = false;
-			bird.ySpeed = -7;
+			if (Input)
+			{
+				Input = false;
+				bird.ySpeed = -bird.JumpSpeed;
+			}
+			else
+			{
+				bird.ySpeed += bird.Gravity;
+				if (bird.ySpeed > bird.JumpSpeed)
+				{
+					bird.ySpeed = bird.JumpSpeed;
+				}
+			}
+			bird.xPos += bird.xSpeed;
+			bird.yPos += bird.ySpeed;
 		}
-		bird.xPos += bird.xSpeed;
-        bird.yPos += bird.ySpeed;
+      };
+      
+	  function updateCanvas()
+      {
+		ctx.clearRect(0, 0, c.width, c.height);
+		drawTerrain();
+		bird.move();
 		bird.draw();
       }
       
+	  function drawTerrain()
+	  {
+		TerrainPos1 += 4;
+		TerrainPos2 += 3;
+		TerrainPos3 += 2;
+		
+		ctx.fillStyle = "LightSkyBlue";
+		ctx.fillRect(0, 0, c.width, c.height);
+		ctx.fillStyle = "LemonChiffon";
+		ctx.fillRect(0, c.height-60, c.width, c.height);
+		
+		var t1 = TerrainPos1%64;
+		
+		for (var i = -128; i <= c.width + 128; i += 64)
+		{
+			/*ctx.fillStyle = "MediumSeaGreen";
+			ctx.beginPath;
+			ctx.arc(x,y, rad, 0, 2*Math.PI);
+			ctx.fill();*/
+			
+			
+			ctx.fillStyle = "Lime";
+			ctx.beginPath();
+			ctx.moveTo(i-t1, c.height-80);
+			ctx.lineTo(i-t1+32, c.height-80);
+			ctx.lineTo(i-t1, c.height-60);
+			ctx.lineTo(i-t1-32, c.height-60);
+			ctx.fill();
+			
+			ctx.fillStyle = "LimeGreen";
+			ctx.beginPath();
+			ctx.moveTo(i-t1+32, c.height-80);
+			ctx.lineTo(i-t1+64, c.height-80);
+			ctx.lineTo(i-t1+32, c.height-60);
+			ctx.lineTo(i-t1, c.height-60);
+			ctx.fill();
+		}
+		ctx.fillStyle = "MediumSeaGreen";
+		ctx.fillRect(0, c.height-120, c.width, 40);
+	  }
     </script>
   </body>
 </html>
