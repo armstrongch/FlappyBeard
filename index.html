@@ -23,7 +23,7 @@
 	  
 	  var NextPipe1 = 1140;
 	  var NextPipe2 = 1560;
-	  var SpaceBetweenPipe = 350;
+	  var SpaceBetweenPipe = 400;
 	  var PipeSpace = 200;
 	  var PipeWidth = 60;
 	  var PipeTopWidth = 80;
@@ -158,8 +158,8 @@
 	  {
 		if (Start)
 		{
-			NextPipe1 -= 4;
-			NextPipe2 -= 4;
+			NextPipe1 -= 6;
+			NextPipe2 -= 6;
 			ctx.fillStyle = "Lime";
 			ctx.fillRect(NextPipe1-PipeWidth/2,PipeOpeningHeight1+PipeSpace/2,PipeWidth,480);
 			ctx.fillRect(NextPipe1-PipeTopWidth/2,PipeOpeningHeight1+PipeSpace/2,PipeTopWidth,20);
@@ -175,12 +175,12 @@
 			if (NextPipe1 < -PipeTopWidth/2)
 			{
 				NextPipe1 = NextPipe2 + SpaceBetweenPipe;
-				PipeOpeningHeight1 = 130 + random()*170;
+				PipeOpeningHeight1 = 130 + Math.random()*130;
 			}
 			else if (NextPipe2 < -PipeTopWidth/2)
 			{
 				NextPipe2 = NextPipe1 + SpaceBetweenPipe;
-				PipeOpeningHeight2 = 130 + random()*170;
+				PipeOpeningHeight2 = 130 + Math.random()*130;
 			}
 		}
 	  }
