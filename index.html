@@ -18,17 +18,27 @@
 	  var TerrainPos3 = 0;
 	  var TerrainPos4 = 0;
 	  var Start = false;
+	  var Click = false;
+	  var Touch = false;
 	  
 	  function gameStart()
       {
 		setInterval("updateCanvas()", 15);
 		document.addEventListener("click", function()
 		{
-			Input = true;
+			if (!Touch) 
+			{
+				Input = true;
+				Click = true;
+			}
 		});
 		document.addEventListener("touchstart", function()
 		{
-			Input = true;
+			if (!Click) 
+			{
+				Input = true;
+				Touch = true;
+			}
 		});
       }
 
