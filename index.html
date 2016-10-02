@@ -20,6 +20,7 @@
 	  var Start = false;
 	  var Click = false;
 	  var Touch = false;
+	  var Score = 0;
 	  
 	  var NextPipe1 = 1140;
 	  var NextPipe2 = 1560;
@@ -29,6 +30,8 @@
 	  var PipeTopWidth = 80;
 	  var PipeOpeningHeight1 = 200;
 	  var PipeOpeningHeight2 = 200;
+	  var Pipe1Scored = false;
+	  var Pipe2Scored = false;
 	  
 	  function gameStart()
       {
@@ -61,6 +64,7 @@
         xSpeed: 0,
         ySpeed: 0,
 		Gravity: 0.5,
+		HGrav: 0,
 		JumpSpeed: 10,
         draw: function()
         {
@@ -69,15 +73,27 @@
         },
 		move: function()
 		{
+			if ((Start)
+			&&
+			(((Math.abs(bird.xPos - bird.Width/2 - NextPipe1) < PipeWidth/2 + bird.Width/2)
+			&& (Math.abs(bird.yPos - PipeOpeningHeight1) > PipeSpace/2 - bird.Height/2))
+			|| ((Math.abs(bird.xPos - bird.Width/2 - NextPipe2) < PipeWidth/2 + bird.Width/2)
+			&& (Math.abs(bird.yPos - PipeOpeningHeight2) > PipeSpace/2 - bird.Height/2)))
+			|| (bird.yPos > 640))
+			{
+				bird.die();
+			}
 			if (Input)
 			{
 				Input = false;
 				Start = true;
+				bird.ySpeed += bird.Gravity;
 				bird.ySpeed = -bird.JumpSpeed;
 			}
 			else
 			{
 				bird.ySpeed += bird.Gravity;
+				bird.xSpeed = bird.HGrav;
 				if (bird.ySpeed > bird.JumpSpeed)
 				{
 					bird.ySpeed = bird.JumpSpeed;
@@ -87,7 +103,25 @@
 			{
 				bird.xPos += bird.xSpeed;
 				bird.yPos += bird.ySpeed;
+				if (bird.yPos < 0) 
+				{
+					bird.yPos = 0;
+				}
+				if ((bird.xPos > NextPipe1) && (!Pipe1Scored))
+				{
+					Pipe1Scored = true;
+					Score++;
+				}
+				if ((bird.xPos > NextPipe2) && (!Pipe2Scored))
+				{
+					Pipe2Scored = true;
+					Score++;
+				}
 			}
+		},
+		die: function()
+		{
+			bird.HGrav = -8;
 		}
       };
       
@@ -98,6 +132,7 @@
 		checkPipe();
 		bird.move();
 		bird.draw();
+		drawScore();
       }
       
 	  function drawTerrain()
@@ -172,17 +207,27 @@
 			
 			ctx.fillRect(NextPipe2-PipeWidth/2,0,PipeWidth,PipeOpeningHeight2-PipeSpace/2);
 			ctx.fillRect(NextPipe2-PipeTopWidth/2,PipeOpeningHeight2-PipeSpace/2-20,PipeTopWidth,20);
+			
 			if (NextPipe1 < -PipeTopWidth/2)
 			{
 				NextPipe1 = NextPipe2 + SpaceBetweenPipe;
 				PipeOpeningHeight1 = 130 + Math.random()*130;
+				Pipe1Scored = false;
 			}
 			else if (NextPipe2 < -PipeTopWidth/2)
 			{
 				NextPipe2 = NextPipe1 + SpaceBetweenPipe;
 				PipeOpeningHeight2 = 130 + Math.random()*130;
+				Pipe2Scored = false;
 			}
 		}
+	  }
+	  
+	  function drawScore()
+	  {
+		ctx.fillStyle = "black";
+		ctx.font = "bold 30px Arial";
+		ctx.fillText("Score: " + Score, 15, 30);
 	  }
     </script>
   </body>
