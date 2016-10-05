@@ -21,6 +21,7 @@
 	  var Click = false;
 	  var Touch = false;
 	  var Score = 0;
+	   var death = false;
 	  
 	  var NextPipe1 = 1140;
 	  var NextPipe2 = 1560;
@@ -38,18 +39,22 @@
 		setInterval("updateCanvas()", 15);
 		document.addEventListener("click", function()
 		{
-			if (!Touch) 
-			{
-				Input = true;
-				Click = true;
+			if (!death){
+				if (!Touch) 
+				{
+					Input = true;
+					Click = true;
+				}
 			}
 		});
 		document.addEventListener("touchstart", function()
 		{
-			if (!Click) 
-			{
-				Input = true;
-				Touch = true;
+			if (!death){
+				if (!Click) 
+				{
+					Input = true;
+					Touch = true;
+				}
 			}
 		});
       }
@@ -122,6 +127,7 @@
 		die: function()
 		{
 			bird.HGrav = -8;
+			death = true;
 		}
       };
       
