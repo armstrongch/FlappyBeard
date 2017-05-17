@@ -21,12 +21,11 @@
 	  var Click = false;
 	  var Touch = false;
 	  var Score = 0;
-	   var death = false;
 	  
 	  var birdSelect = 0;
-	  var birds = ["redBeard.png", "burkle.png"];
-	  var birds2 = ["redBeard2.png", "burkle2.png"];
-	  var birdNames = ["Redbeard", "Burkle"];
+	  var birds = ["redBeard.png", "burkle.png", "sambo.png"];
+	  var birds2 = ["redBeard2.png", "burkle2.png", "sambo2.png"];
+	  var birdNames = ["Redbeard", "Burkle", "Sambo"];
 	  
 	  var NextPipe1 = 1140;
 	  var NextPipe2 = 1560;
@@ -38,29 +37,39 @@
 	  var PipeOpeningHeight2 = 200;
 	  var Pipe1Scored = false;
 	  var Pipe2Scored = false;
+	  var deadBird = false;
+	  
+	  var charSelect = true;
 	  
 	  var closedImg = new Image(40, 40);
 	  var openImg = new Image(40, 40);
 	  closedImg.src = birds[birdSelect];
 	  openImg.src = birds2[birdSelect];
 	  
+	  var inputX;
+	  var inputY;
+	  
 	  function gameStart()
       {
 		setInterval("updateCanvas()", 15);
-		document.addEventListener("click", function()
+		document.addEventListener("click", function(event)
 		{
-			if ((!death) && (!Touch)) 
+			if ((!Touch) && (!deadBird))
 			{
 				Input = true;
 				Click = true;
+				inputX = event.clientX;
+				inputY = event.clientY;
 			}
 		});
-		document.addEventListener("touchstart", function()
+		document.addEventListener("touchstart", function(event)
 		{
-			if ((!death) && (!Click))
+			if ((!Click) && (!deadBird)) 
 			{
 				Input = true;
 				Touch = true;
+				inputX = event.clientX;
+				inputY = event.clientY;
 			}
 		});
       }
@@ -108,6 +117,23 @@
 				Start = true;
 				this.ySpeed += this.Gravity;
 				this.ySpeed = -this.JumpSpeed;
+				
+				if (this.xPos < 0)
+				{
+					this.xPos = c.width/2 - 20;
+					this.yPos = c.height/2 - 20;
+					this.xSpeed = 0;
+					this.ySpeed = 0;
+					this.HGrav = 0;
+					Start = false;
+					Score = 0;
+					NextPipe1 = 1140;
+				    NextPipe2 = 1560;
+				    PipeOpeningHeight1 = 200;
+				    PipeOpeningHeight2 = 200;
+				    Pipe1Scored = false;
+				    Pipe2Scored = false;
+				}
 			}
 			else
 			{
@@ -140,8 +166,8 @@
 		},
 		die: function()
 		{
-			bird.HGrav = -8;
-			death = true;
+			this.HGrav = -8;
+			deadBird = true;
 		}
       };
       
