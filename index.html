@@ -23,6 +23,11 @@
 	  var Score = 0;
 	   var death = false;
 	  
+	  var birdSelect = 0;
+	  var birds = ["redBeard.png", "burkle.png"];
+	  var birds2 = ["redBeard2.png", "burkle2.png"];
+	  var birdNames = ["Redbeard", "Burkle"];
+	  
 	  var NextPipe1 = 1140;
 	  var NextPipe2 = 1560;
 	  var SpaceBetweenPipe = 400;
@@ -33,6 +38,11 @@
 	  var PipeOpeningHeight2 = 200;
 	  var Pipe1Scored = false;
 	  var Pipe2Scored = false;
+	  
+	  var closedImg = new Image(40, 40);
+	  var openImg = new Image(40, 40);
+	  closedImg.src = birds[birdSelect];
+	  openImg.src = birds2[birdSelect];
 	  
 	  function gameStart()
       {
@@ -73,51 +83,59 @@
 		JumpSpeed: 10,
         draw: function()
         {
-          ctx.fillStyle = this.Color;
-          ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
+		  //ctx.fillStyle = this.Color;
+          //ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
+		  if (this.ySpeed > 0)
+		  {
+			ctx.drawImage(closedImg, this.xPos, this.yPos-10);
+		  }
+		  else
+		  {
+			ctx.drawImage(openImg, this.xPos, this.yPos-10);
+		  }
         },
 		move: function()
 		{
 			if ((Start)
 			&&
-			(((Math.abs(bird.xPos - bird.Width/2 - NextPipe1) < PipeWidth/2 + bird.Width/2)
-			&& (Math.abs(bird.yPos - PipeOpeningHeight1) > PipeSpace/2 - bird.Height/2))
-			|| ((Math.abs(bird.xPos - bird.Width/2 - NextPipe2) < PipeWidth/2 + bird.Width/2)
-			&& (Math.abs(bird.yPos - PipeOpeningHeight2) > PipeSpace/2 - bird.Height/2)))
-			|| (bird.yPos > 640))
+			(((Math.abs(this.xPos - this.Width/2 - NextPipe1) < PipeWidth/2 + this.Width/2)
+			&& (Math.abs(this.yPos - PipeOpeningHeight1) > PipeSpace/2 - this.Height/2))
+			|| ((Math.abs(this.xPos - this.Width/2 - NextPipe2) < PipeWidth/2 + this.Width/2)
+			&& (Math.abs(this.yPos - PipeOpeningHeight2) > PipeSpace/2 - this.Height/2)))
+			|| (this.yPos > 640))
 			{
-				bird.die();
+				this.die();
 			}
 			if (Input)
 			{
 				Input = false;
 				Start = true;
-				bird.ySpeed += bird.Gravity;
-				bird.ySpeed = -bird.JumpSpeed;
+				this.ySpeed += this.Gravity;
+				this.ySpeed = -this.JumpSpeed;
 			}
 			else
 			{
-				bird.ySpeed += bird.Gravity;
-				bird.xSpeed = bird.HGrav;
-				if (bird.ySpeed > bird.JumpSpeed)
+				this.ySpeed += this.Gravity;
+				this.xSpeed = this.HGrav;
+				if (this.ySpeed > this.JumpSpeed)
 				{
-					bird.ySpeed = bird.JumpSpeed;
+					this.ySpeed = this.JumpSpeed;
 				}
 			}
 			if (Start)
 			{
-				bird.xPos += bird.xSpeed;
-				bird.yPos += bird.ySpeed;
-				if (bird.yPos < 0) 
+				this.xPos += this.xSpeed;
+				this.yPos += this.ySpeed;
+				if (this.yPos < 0) 
 				{
-					bird.yPos = 0;
+					this.yPos = 0;
 				}
-				if ((bird.xPos > NextPipe1) && (!Pipe1Scored))
+				if ((this.xPos > NextPipe1) && (!Pipe1Scored))
 				{
 					Pipe1Scored = true;
 					Score++;
 				}
-				if ((bird.xPos > NextPipe2) && (!Pipe2Scored))
+				if ((this.xPos > NextPipe2) && (!Pipe2Scored))
 				{
 					Pipe2Scored = true;
 					Score++;
