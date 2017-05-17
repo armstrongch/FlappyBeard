@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flappy Beard</title>
+  </head>
+  <body onload="gameStart()">
+    <canvas id="myCanvas" width=640, height = 480, style="border:1px solid #000000;">
+    </canvas>
+    
+    <script>
+      
+	  var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+	  var Test = 0;
+	  var Input = false;
+	  var TerrainPos1 = 0;
+	  var TerrainPos2 = 0;
+	  var TerrainPos3 = 0;
+	  var TerrainPos4 = 0;
+	  var Start = false;
+	  var Click = false;
+	  var Touch = false;
+	  var Score = 0;
+	  
+	  var birdSelect = 0;
+	  var birds = ["redBeard.png", "burkle.png", "sambo.png"];
+	  var birds2 = ["redBeard2.png", "burkle2.png", "sambo2.png"];
+	  var birdNames = ["Redbeard", "Burkle", "Sambo"];
+	  
+	  var NextPipe1 = 1140;
+	  var NextPipe2 = 1560;
+	  var SpaceBetweenPipe = 400;
+	  var PipeSpace = 200;
+	  var PipeWidth = 60;
+	  var PipeTopWidth = 80;
+	  var PipeOpeningHeight1 = 200;
+	  var PipeOpeningHeight2 = 200;
+	  var Pipe1Scored = false;
+	  var Pipe2Scored = false;
+	  var deadBird = false;
+	  
+	  var charSelect = true;
+	  
+	  var closedImg = new Image(40, 40);
+	  var openImg = new Image(40, 40);
+	  closedImg.src = birds[birdSelect];
+	  openImg.src = birds2[birdSelect];
+	  
+	  var inputX;
+	  var inputY;
+	  
+	  function gameStart()
+      {
+		setInterval("updateCanvas()", 15);
+		document.addEventListener("click", function(event)
+		{
+			if ((!Touch) && (!deadBird))
+			{
+				Input = true;
+				Click = true;
+				inputX = event.clientX;
+				inputY = event.clientY;
+			}
+		});
+		document.addEventListener("touchstart", function(event)
+		{
+			if ((!Click) && (!deadBird)) 
+			{
+				Input = true;
+				Touch = true;
+				inputX = event.clientX;
+				inputY = event.clientY;
+			}
+		});
+      }
+
+	  var bird =
+      {
+        Width: 40,
+        Height: 40,
+		xPos: c.width/2 - 20,
+        yPos: c.height/2 - 20,
+        Color: "black",
+        xSpeed: 0,
+        ySpeed: 0,
+		Gravity: 0.5,
+		HGrav: 0,
+		JumpSpeed: 10,
+        draw: function()
+        {
+		  //ctx.fillStyle = this.Color;
+          //ctx.fillRect(this.xPos, this.yPos, this.Width, this.Height);
+		  if (this.ySpeed > 0)
+		  {
+			ctx.drawImage(closedImg, this.xPos, this.yPos-10);
+		  }
+		  else
+		  {
+			ctx.drawImage(openImg, this.xPos, this.yPos-10);
+		  }
+        },
+		move: function()
+		{
+			if ((Start)
+			&&
+			(((Math.abs(this.xPos - this.Width/2 - NextPipe1) < PipeWidth/2 + this.Width/2)
+			&& (Math.abs(this.yPos - PipeOpeningHeight1) > PipeSpace/2 - this.Height/2))
+			|| ((Math.abs(this.xPos - this.Width/2 - NextPipe2) < PipeWidth/2 + this.Width/2)
+			&& (Math.abs(this.yPos - PipeOpeningHeight2) > PipeSpace/2 - this.Height/2)))
+			|| (this.yPos > 640))
+			{
+				this.die();
+			}
+			if (Input)
+			{
+				Input = false;
+				Start = true;
+				this.ySpeed += this.Gravity;
+				this.ySpeed = -this.JumpSpeed;
+				
+				if (this.xPos < 0)
+				{
+					this.xPos = c.width/2 - 20;
+					this.yPos = c.height/2 - 20;
+					this.xSpeed = 0;
+					this.ySpeed = 0;
+					this.HGrav = 0;
+					Start = false;
+					Score = 0;
+					NextPipe1 = 1140;
+				    NextPipe2 = 1560;
+				    PipeOpeningHeight1 = 200;
+				    PipeOpeningHeight2 = 200;
+				    Pipe1Scored = false;
+				    Pipe2Scored = false;
+				}
+			}
+			else
+			{
+				this.ySpeed += this.Gravity;
+				this.xSpeed = this.HGrav;
+				if (this.ySpeed > this.JumpSpeed)
+				{
+					this.ySpeed = this.JumpSpeed;
+				}
+			}
+			if (Start)
+			{
+				this.xPos += this.xSpeed;
+				this.yPos += this.ySpeed;
+				if (this.yPos < 0) 
+				{
+					this.yPos = 0;
+				}
+				if ((this.xPos > NextPipe1) && (!Pipe1Scored))
+				{
+					Pipe1Scored = true;
+					Score++;
+				}
+				if ((this.xPos > NextPipe2) && (!Pipe2Scored))
+				{
+					Pipe2Scored = true;
+					Score++;
+				}
+			}
+		},
+		die: function()
+		{
+			this.HGrav = -8;
+			deadBird = true;
+		}
+      };
+      
+	  function updateCanvas()
+      {
+		ctx.clearRect(0, 0, c.width, c.height);
+		drawTerrain();
+		checkPipe();
+		bird.move();
+		bird.draw();
+		drawScore();
+      }
+      
+	  function drawTerrain()
+	  {
+		TerrainPos1 += 4;
+		TerrainPos2 += 3;
+		TerrainPos3 += 2;
+		TerrainPos4 += 1;
+		
+		var t1 = TerrainPos1%64;
+		var t2 = TerrainPos2%64;
+		var t3 = TerrainPos3%64;
+		var t4 = TerrainPos4%64;
+		
+		ctx.fillStyle = "LightSkyBlue";
+		ctx.fillRect(0, 0, c.width, c.height);
+		
+		for (var i = -128; i <= c.width + 128; i += 64)
+		{
+			ctx.fillStyle = "SlateGray";
+			ctx.fillRect(i, c.height-160, 14, 50);
+			ctx.fillRect(i+16, c.height-150, 14, 50);
+			ctx.fillRect(i+32, c.height-170, 14, 50);
+			ctx.fillRect(i+48, c.height-140, 14, 50);
+			
+			ctx.fillStyle = "Lime";
+			ctx.beginPath();
+			ctx.moveTo(i-t1, c.height-80);
+			ctx.lineTo(i-t1+32, c.height-80);
+			ctx.lineTo(i-t1, c.height-60);
+			ctx.lineTo(i-t1-32, c.height-60);
+			ctx.fill();
+			
+			ctx.fillStyle = "LimeGreen";
+			ctx.beginPath();
+			ctx.moveTo(i-t1+32, c.height-80);
+			ctx.lineTo(i-t1+64, c.height-80);
+			ctx.lineTo(i-t1+32, c.height-60);
+			ctx.lineTo(i-t1, c.height-60);
+			ctx.fill();
+			
+			ctx.fillStyle = "MediumSeaGreen";
+			ctx.beginPath();
+			ctx.arc(i+2-t2, c.height-120, 8, 0, 2*Math.PI);
+			ctx.arc(i+24-t2, c.height-120, 16, 0, 2*Math.PI);
+			ctx.arc(i+46-t2, c.height-120, 8, 0, 2*Math.PI);
+			ctx.fill();
+			
+		}
+		ctx.fillStyle = "MediumSeaGreen";
+		ctx.fillRect(0, c.height-120, c.width, 40);
+		
+		ctx.fillStyle = "LemonChiffon";
+		ctx.fillRect(0, c.height-60, c.width, c.height);
+	  }
+	  
+	  function checkPipe()
+	  {
+		if (Start)
+		{
+			NextPipe1 -= 6;
+			NextPipe2 -= 6;
+			ctx.fillStyle = "Lime";
+			ctx.fillRect(NextPipe1-PipeWidth/2,PipeOpeningHeight1+PipeSpace/2,PipeWidth,480);
+			ctx.fillRect(NextPipe1-PipeTopWidth/2,PipeOpeningHeight1+PipeSpace/2,PipeTopWidth,20);
+			
+			ctx.fillRect(NextPipe1-PipeWidth/2,0,PipeWidth,PipeOpeningHeight1-PipeSpace/2);
+			ctx.fillRect(NextPipe1-PipeTopWidth/2,PipeOpeningHeight1-PipeSpace/2-20,PipeTopWidth,20);
+			
+			ctx.fillRect(NextPipe2-PipeWidth/2,PipeOpeningHeight2+PipeSpace/2,PipeWidth,480);
+			ctx.fillRect(NextPipe2-PipeTopWidth/2,PipeOpeningHeight2+PipeSpace/2,PipeTopWidth,20);
+			
+			ctx.fillRect(NextPipe2-PipeWidth/2,0,PipeWidth,PipeOpeningHeight2-PipeSpace/2);
+			ctx.fillRect(NextPipe2-PipeTopWidth/2,PipeOpeningHeight2-PipeSpace/2-20,PipeTopWidth,20);
+			
+			if (NextPipe1 < -PipeTopWidth/2)
+			{
+				NextPipe1 = NextPipe2 + SpaceBetweenPipe;
+				PipeOpeningHeight1 = 130 + Math.random()*130;
+				Pipe1Scored = false;
+			}
+			else if (NextPipe2 < -PipeTopWidth/2)
+			{
+				NextPipe2 = NextPipe1 + SpaceBetweenPipe;
+				PipeOpeningHeight2 = 130 + Math.random()*130;
+				Pipe2Scored = false;
+			}
+		}
+	  }
+	  
+	  function drawScore()
+	  {
+		ctx.fillStyle = "black";
+		ctx.font = "bold 30px Arial";
+		ctx.fillText("Score: " + Score, 15, 30);
+	  }
+    </script>
+  </body>
+</html>
