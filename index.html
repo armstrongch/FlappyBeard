@@ -54,7 +54,7 @@
 		setInterval("updateCanvas()", 15);
 		document.addEventListener("click", function(event)
 		{
-			if ((!Touch) && (!deadBird))
+			if (!Touch)
 			{
 				Input = true;
 				Click = true;
@@ -64,7 +64,7 @@
 		});
 		document.addEventListener("touchstart", function(event)
 		{
-			if ((!Click) && (!deadBird)) 
+			if (!Click)
 			{
 				Input = true;
 				Touch = true;
@@ -111,7 +111,7 @@
 			{
 				this.die();
 			}
-			if (Input)
+			if ((Input) && (!deadBird))
 			{
 				Input = false;
 				Start = true;
