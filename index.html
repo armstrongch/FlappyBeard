@@ -49,7 +49,7 @@
 		setInterval("updateCanvas()", 15);
 		document.addEventListener("click", function()
 		{
-			if (!death) && (!Touch) 
+			if ((!death) && (!Touch)) 
 			{
 				Input = true;
 				Click = true;
@@ -57,7 +57,7 @@
 		});
 		document.addEventListener("touchstart", function()
 		{
-			if (!death) && (!Click) 
+			if ((!death) && (!Click))
 			{
 				Input = true;
 				Touch = true;
