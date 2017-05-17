@@ -49,22 +49,18 @@
 		setInterval("updateCanvas()", 15);
 		document.addEventListener("click", function()
 		{
-			if (!death){
-				if (!Touch) 
-				{
-					Input = true;
-					Click = true;
-				}
+			if (!death) && (!Touch) 
+			{
+				Input = true;
+				Click = true;
 			}
 		});
 		document.addEventListener("touchstart", function()
 		{
-			if (!death){
-				if (!Click) 
-				{
-					Input = true;
-					Touch = true;
-				}
+			if (!death) && (!Click) 
+			{
+				Input = true;
+				Touch = true;
 			}
 		});
       }
